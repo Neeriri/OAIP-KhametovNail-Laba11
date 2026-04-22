@@ -5,7 +5,8 @@ obj/
 *.dll
 *.exe
 *.pdb
-*.userprefs
+*.config
+*.user
 
 # Dependencies
 packages/
@@ -13,8 +14,19 @@ packages/
 # Logs
 *.log
 
-# User-specific files
-*.user
-.vs/
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
 .vscode/
+.idea/
+*.suo
+*.userosscache
+*.userprefs
+
+# OS generated files
+.DS_Store
+Thumbs.db
 ```

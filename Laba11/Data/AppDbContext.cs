@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Laba11.Models;
 
 namespace Laba11.Data
@@ -11,7 +12,7 @@ namespace Laba11.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=PracticeDb;Trusted_Connection=True;");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=PracticeDb;Username=postgres;Password=postgres");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
