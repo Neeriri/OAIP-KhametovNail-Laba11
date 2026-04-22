@@ -1,31 +1,20 @@
 ```
 # Build artifacts
-Laba11/obj/
-Laba11/bin/
-
-# Compiled files
-*.exe
+bin/
+obj/
 *.dll
+*.exe
 *.pdb
 *.userprefs
-*.cache
-*.i
-*.g.i.cs
-*.AssemblyAttributes.cs
-*.AssemblyReference.cache
-*.MarkupCompile.i.cache
-*.MarkupCompile.i.lref
-*.g.cs
-*.g.i.cs
 
-# Visual Studio
+# Dependencies
+packages/
+
+# Logs
+*.log
+
+# User-specific files
 *.user
-*.suo
-*.userosscache
-*.sln.docstates
-
-# Temporary files
-*.tmp
-*~
-Thumbs.db
+.vs/
+.vscode/
 ```
