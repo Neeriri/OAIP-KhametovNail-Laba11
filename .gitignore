@@ -1,37 +1,31 @@
 ```
-# Build results
-bin/
-obj/
-out/
-
-# User-specific files
-.vs/
-.idea/
-*.userprefs
-*.suo
-*.user
-*.aps
-
-# Environment specific settings
-.env
-.env.local
-*.env.*
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-
-# Dependency directories
-node_modules/
-packages/
+# Build artifacts
+Laba11/obj/
+Laba11/bin/
 
 # Compiled files
-*.dll
 *.exe
+*.dll
 *.pdb
-*.nupkg
-*.snupkg
+*.userprefs
+*.cache
+*.i
+*.g.i.cs
+*.AssemblyAttributes.cs
+*.AssemblyReference.cache
+*.MarkupCompile.i.cache
+*.MarkupCompile.i.lref
+*.g.cs
+*.g.i.cs
+
+# Visual Studio
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Temporary files
+*.tmp
+*~
+Thumbs.db
 ```
