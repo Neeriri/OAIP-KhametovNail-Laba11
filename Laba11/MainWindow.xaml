@@ -5,8 +5,90 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Laba11"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Практика студентов" Height="600" Width="900">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Переключатель ролей -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Роль:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <RadioButton Content="Студент" GroupName="Role" x:Name="StudentRoleRadio" IsChecked="True" Margin="0,0,20,0" Click="RoleRadio_Click"/>
+            <RadioButton Content="Администратор" GroupName="Role" x:Name="AdminRoleRadio" Margin="0,0,20,0" Click="RoleRadio_Click"/>
+        </StackPanel>
+
+        <!-- Форма CRUD операций -->
+        <GroupBox Grid.Row="1" Header="Данные студента" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Имя:" Margin="5"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="FirstNameBox" Margin="5"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Фамилия:" Margin="5"/>
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="LastNameBox" Margin="5"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Дата рождения:" Margin="5"/>
+                <DatePicker Grid.Row="2" Grid.Column="1" x:Name="DateOfBirthPicker" Margin="5"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Email:" Margin="5"/>
+                <TextBox Grid.Row="3" Grid.Column="1" x:Name="EmailBox" Margin="5"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Пароль:" Margin="5"/>
+                <TextBox Grid.Row="4" Grid.Column="1" x:Name="PasswordBox" Margin="5"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Университет:" Margin="5"/>
+                <TextBox Grid.Row="5" Grid.Column="1" x:Name="UniversityBox" Margin="5"/>
+
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="Специальность:" Margin="5"/>
+                <TextBox Grid.Row="6" Grid.Column="1" x:Name="SpecialtyBox" Margin="5"/>
+
+                <TextBlock Grid.Row="7" Grid.Column="0" Text="Компания:" Margin="5"/>
+                <ComboBox Grid.Row="7" Grid.Column="1" x:Name="CompanyCombo" Margin="5" DisplayMemberPath="Name"/>
+
+                <StackPanel Grid.Row="8" Grid.Column="1" Orientation="Horizontal" Margin="5">
+                    <Button Content="Добавить" x:Name="AddBtn" Click="AddBtn_Click" Margin="0,0,10,0" Padding="15,5"/>
+                    <Button Content="Обновить" x:Name="UpdateBtn" Click="UpdateBtn_Click" Margin="0,0,10,0" Padding="15,5"/>
+                    <Button Content="Удалить" x:Name="DeleteBtn" Click="DeleteBtn_Click" Padding="15,5"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <!-- DataGrid для отображения данных -->
+        <DataGrid Grid.Row="2" x:Name="StudentsGrid" AutoGenerateColumns="False" SelectionChanged="StudentsGrid_SelectionChanged" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="50"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" Width="100"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}" Width="100"/>
+                <DataGridTextColumn Header="Дата рождения" Binding="{Binding DateOfBirth, StringFormat={}{0:dd.MM.yyyy}}" Width="100"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="150"/>
+                <DataGridTextColumn Header="Университет" Binding="{Binding University}" Width="120"/>
+                <DataGridTextColumn Header="Специальность" Binding="{Binding Specialty}" Width="120"/>
+                <DataGridTextColumn Header="Компания" Binding="{Binding Company.Name, FallbackValue='Нет'}" Width="120"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Кнопки управления -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Обновить список" x:Name="RefreshBtn" Click="RefreshBtn_Click" Padding="15,5"/>
+        </StackPanel>
     </Grid>
 </Window>
