@@ -1,0 +1,37 @@
+```
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+.vs/
+.idea/
+*.userprefs
+*.suo
+*.user
+*.aps
+
+# Environment specific settings
+.env
+.env.local
+*.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Dependency directories
+node_modules/
+packages/
+
+# Compiled files
+*.dll
+*.exe
+*.pdb
+*.nupkg
+*.snupkg
+```
