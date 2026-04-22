@@ -7,9 +7,15 @@ obj/
 *.pdb
 *.config
 *.user
+*.suo
+*.userosscache
+*.sln.docstates
 
 # Dependencies
 packages/
+node_modules/
+.nuget/
+.npm/
 
 # Logs
 *.log
@@ -22,9 +28,8 @@ packages/
 # Editors
 .vscode/
 .idea/
-*.suo
-*.userosscache
-*.userprefs
+*.swp
+*.swo
 
 # OS generated files
 .DS_Store
