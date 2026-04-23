@@ -69,6 +69,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\20260422201215_InitialCreate.cs" />
+    <Compile Include="Migrations\20260422201215_InitialCreate.Designer.cs">
+      <DependentUpon>20260422201215_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

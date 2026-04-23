@@ -8,8 +8,6 @@ namespace Laba11.Models
         public string Name { get; set; }
         public string Industry { get; set; }
         public string City { get; set; }
-
-        // Навигационная коллекция
         public ICollection<Student> Students { get; set; }
     }
 }

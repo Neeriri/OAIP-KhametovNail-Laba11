@@ -8,12 +8,8 @@ namespace Laba11.Models
         public DateTime SubmissionDate { get; set; }
         public string Topic { get; set; }
         public int Grade { get; set; }
-
-        // Внешние ключи
         public int StudentId { get; set; }
-        public int CompanyId { get; set; }
-
-        // Навигационные свойства
+        public int? CompanyId { get; set; }
         public Student Student { get; set; }
         public Company Company { get; set; }
     }

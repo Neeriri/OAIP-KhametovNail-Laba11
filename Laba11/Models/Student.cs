@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using System;
 namespace Laba11.Models
 {
     public class Student
@@ -13,7 +13,7 @@ namespace Laba11.Models
         public string University { get; set; }
         public string Specialty { get; set; }
 
-        // Навигационные свойства
+
         public Company Company { get; set; }
         public int? CompanyId { get; set; }
         public ICollection<Report> Reports { get; set; }

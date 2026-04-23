@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using Laba11.Models;
 
 namespace Laba11.Data
@@ -12,12 +11,11 @@ namespace Laba11.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=PracticeDb;Username=postgres;Password=postgres");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=practicedb;Username=postgres;Password=12345");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Студент
             modelBuilder.Entity<Student>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -27,26 +25,22 @@ namespace Laba11.Data
                 entity.Property(e => e.LastName).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.DateOfBirth).IsRequired();
                 entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
+                entity.HasIndex(e => e.Email).IsUnique();
                 entity.Property(e => e.Password).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.University).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Specialty).IsRequired().HasMaxLength(100);
 
-                entity.HasIndex(e => e.Email).IsUnique();
-
-                // Связь Студент -> Компания (многие к одному)
                 entity.HasOne(e => e.Company)
                       .WithMany(c => c.Students)
                       .HasForeignKey(e => e.CompanyId)
-                      .OnDelete(DeleteBehavior.Cascade);
+                      .OnDelete(DeleteBehavior.SetNull);
 
-                // Связь Студент -> Отчёты (один ко многим)
                 entity.HasMany(e => e.Reports)
                       .WithOne(r => r.Student)
                       .HasForeignKey(r => r.StudentId)
                       .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // Компания
             modelBuilder.Entity<Company>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -57,7 +51,6 @@ namespace Laba11.Data
                 entity.Property(e => e.City).IsRequired().HasMaxLength(100);
             });
 
-            // Отчёт
             modelBuilder.Entity<Report>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -67,11 +60,24 @@ namespace Laba11.Data
                 entity.Property(e => e.Topic).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Grade).IsRequired();
 
+                entity.HasOne(e => e.Student)
+                      .WithMany(s => s.Reports)
+                      .HasForeignKey(e => e.StudentId)
+                      .OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne(e => e.Company)
                       .WithMany()
                       .HasForeignKey(e => e.CompanyId)
-                      .OnDelete(DeleteBehavior.Cascade);
+                      .OnDelete(DeleteBehavior.SetNull)
+                      .IsRequired(false);
             });
+
+            modelBuilder.Entity<Company>().HasData(
+                new Company { Id = 1, Name = "Яндекс", Industry = "IT", City = "Москва" },
+                new Company { Id = 2, Name = "Сбер", Industry = "Финансы", City = "Москва" },
+                new Company { Id = 3, Name = "Газпром Нефть", Industry = "Энергетика", City = "Санкт-Петербург" }
+            );
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
