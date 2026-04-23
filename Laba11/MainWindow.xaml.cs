@@ -122,9 +122,38 @@ namespace Laba11
                 LoadData();
                 MessageBox.Show("Студент успешно добавлен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            catch (DbUpdateException dbEx)
+            {
+                string errorMessage = "Ошибка базы данных при добавлении студента.\n\n";
+                
+                if (dbEx.InnerException != null)
+                {
+                    errorMessage += $"Детали ошибки: {dbEx.InnerException.Message}\n\n";
+                    
+                    if (dbEx.InnerException.InnerException != null)
+                    {
+                        errorMessage += $"Дополнительная информация: {dbEx.InnerException.InnerException.Message}";
+                    }
+                }
+                
+                errorMessage += "\nВозможные причины:\n" +
+                               "- Email уже существует в базе данных (нарушение уникальности)\n" +
+                               "- Нарушение целостности данных (компания была удалена)\n" +
+                               "- Проблемы с подключением к базе данных\n" +
+                               "- Превышение максимальной длины строковых полей (Имя/Фамилия до 50 символов, Email/Пароль до 100, Университет/Специальность до 100)";
+                
+                MessageBox.Show(errorMessage, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка добавления: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                string errorMessage = $"Ошибка добавления: {ex.Message}\n\n";
+                
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $"Детали: {ex.InnerException.Message}";
+                }
+                
+                MessageBox.Show(errorMessage, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -155,9 +184,38 @@ namespace Laba11
                 LoadData();
                 MessageBox.Show("Данные студента успешно обновлены!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            catch (DbUpdateException dbEx)
+            {
+                string errorMessage = "Ошибка базы данных при обновлении студента.\n\n";
+                
+                if (dbEx.InnerException != null)
+                {
+                    errorMessage += $"Детали ошибки: {dbEx.InnerException.Message}\n\n";
+                    
+                    if (dbEx.InnerException.InnerException != null)
+                    {
+                        errorMessage += $"Дополнительная информация: {dbEx.InnerException.InnerException.Message}";
+                    }
+                }
+                
+                errorMessage += "\nВозможные причины:\n" +
+                               "- Email уже используется другим студентом (нарушение уникальности)\n" +
+                               "- Нарушение целостности данных (компания была удалена)\n" +
+                               "- Проблемы с подключением к базе данных\n" +
+                               "- Превышение максимальной длины строковых полей (Имя/Фамилия до 50 символов, Email/Пароль до 100, Университет/Специальность до 100)";
+                
+                MessageBox.Show(errorMessage, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка обновления: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                string errorMessage = $"Ошибка обновления: {ex.Message}\n\n";
+                
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $"Детали: {ex.InnerException.Message}";
+                }
+                
+                MessageBox.Show(errorMessage, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -184,9 +242,37 @@ namespace Laba11
                     MessageBox.Show("Студент успешно удален!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
+            catch (DbUpdateException dbEx)
+            {
+                string errorMessage = "Ошибка базы данных при удалении студента.\n\n";
+                
+                if (dbEx.InnerException != null)
+                {
+                    errorMessage += $"Детали ошибки: {dbEx.InnerException.Message}\n\n";
+                    
+                    if (dbEx.InnerException.InnerException != null)
+                    {
+                        errorMessage += $"Дополнительная информация: {dbEx.InnerException.InnerException.Message}";
+                    }
+                }
+                
+                errorMessage += "\nВозможные причины:\n" +
+                               "- Студент имеет связанные отчёты (нарушение ссылочной целостности)\n" +
+                               "- Студент уже был удалён из базы данных\n" +
+                               "- Проблемы с подключением к базе данных";
+                
+                MessageBox.Show(errorMessage, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка удаления: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                string errorMessage = $"Ошибка удаления: {ex.Message}\n\n";
+                
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $"Детали: {ex.InnerException.Message}";
+                }
+                
+                MessageBox.Show(errorMessage, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -235,6 +321,20 @@ namespace Laba11
                 MessageBox.Show("Введите email!", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
+            // Валидация email: проверка наличия символа @
+            if (!EmailBox.Text.Contains("@"))
+            {
+                MessageBox.Show("Email должен содержать символ '@'!", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            // Проверка уникальности email
+            var existingStudent = _context.Students
+                .FirstOrDefault(s => s.Email == EmailBox.Text && s.Id != _selectedStudent?.Id);
+            if (existingStudent != null)
+            {
+                MessageBox.Show("Email уже зарегистрирован! Пожалуйста, используйте другой email.", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
             if (string.IsNullOrWhiteSpace(PasswordBox.Text))
             {
                 MessageBox.Show("Введите пароль!", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -269,9 +369,37 @@ namespace Laba11
                     MessageBox.Show("Выберите отчёт для удаления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
+            catch (DbUpdateException dbEx)
+            {
+                string errorMessage = "Ошибка базы данных при удалении отчёта.\n\n";
+                
+                if (dbEx.InnerException != null)
+                {
+                    errorMessage += $"Детали ошибки: {dbEx.InnerException.Message}\n\n";
+                    
+                    if (dbEx.InnerException.InnerException != null)
+                    {
+                        errorMessage += $"Дополнительная информация: {dbEx.InnerException.InnerException.Message}";
+                    }
+                }
+                
+                errorMessage += "\nВозможные причины:\n" +
+                               "- Отчёт уже был удалён из базы данных\n" +
+                               "- Нарушение ссылочной целостности\n" +
+                               "- Проблемы с подключением к базе данных";
+                
+                MessageBox.Show(errorMessage, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка удаления: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                string errorMessage = $"Ошибка удаления: {ex.Message}\n\n";
+                
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $"Детали: {ex.InnerException.Message}";
+                }
+                
+                MessageBox.Show(errorMessage, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -300,13 +428,26 @@ namespace Laba11
                     return;
                 }
 
+                // Валидация оценки
+                if (!int.TryParse(ReportGradeBox.Text, out int grade))
+                {
+                    MessageBox.Show("Оценка должна быть числом!", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (grade < 0 || grade > 100)
+                {
+                    MessageBox.Show("Оценка должна быть в диапазоне от 0 до 100!", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 var selectedCompany = ReportCompanyCombo.SelectedItem as Company;
 
                 var report = new Report
                 {
                     SubmissionDate = ReportDatePicker.SelectedDate ?? DateTime.Now,
                     Topic = ReportTopicBox.Text,
-                    Grade = int.Parse(ReportGradeBox.Text),
+                    Grade = grade,
                     StudentId = _selectedStudent.Id,
                     CompanyId = selectedCompany?.Id  
                 };
@@ -318,9 +459,37 @@ namespace Laba11
                 ClearReportForm();
                 MessageBox.Show("Отчёт успешно добавлен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            catch (DbUpdateException dbEx)
+            {
+                string errorMessage = "Ошибка базы данных при добавлении отчёта.\n\n";
+                
+                if (dbEx.InnerException != null)
+                {
+                    errorMessage += $"Детали ошибки: {dbEx.InnerException.Message}\n\n";
+                    
+                    if (dbEx.InnerException.InnerException != null)
+                    {
+                        errorMessage += $"Дополнительная информация: {dbEx.InnerException.InnerException.Message}";
+                    }
+                }
+                
+                errorMessage += "\nВозможные причины:\n" +
+                               "- Нарушение целостности данных (студент или компания были удалены)\n" +
+                               "- Проблемы с подключением к базе данных\n" +
+                               "- Превышение максимальной длины строковых полей";
+                
+                MessageBox.Show(errorMessage, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}\n\n{ex.InnerException?.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                string errorMessage = $"Ошибка: {ex.Message}\n\n";
+                
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $"Детали: {ex.InnerException.Message}";
+                }
+                
+                MessageBox.Show(errorMessage, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void ClearReportForm()
